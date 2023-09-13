@@ -2,6 +2,7 @@
 venv*
 activate
 *.mp4
+.vscode
 
 
 # Byte-compiled / optimized / DLL files
