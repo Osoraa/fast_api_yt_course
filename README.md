@@ -16,6 +16,10 @@ Course video is hosted on [Youtube](https://youtu.be/0sOvCWFmrtA?list=PL1rYsxRTx
 - Install the fastapi module/dependencies with
 
 ``` Bash
+    sudo apt install python3-pip python3-venv -y
+
+    . venv/bin/activate
+
     pip install fastapi[all]
 ```
 
