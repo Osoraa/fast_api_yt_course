@@ -13,14 +13,14 @@ Course video is hosted on [Youtube](https://youtu.be/0sOvCWFmrtA?list=PL1rYsxRTx
 ## Starting out
 
 - Set up a Virtual env. for dependency management.
-- Install the fastapi module/dependencies with
+- pip install dependencies with
 
 ``` Bash
     sudo apt install python3-pip python3-venv -y
 
     . venv/bin/activate
 
-    pip install fastapi[all]
+    pip install fastapi[all] psycopg2-binary
 ```
 
 - Start the application with
