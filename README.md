@@ -20,13 +20,13 @@ Course video is hosted on [Youtube](https://youtu.be/0sOvCWFmrtA?list=PL1rYsxRTx
 
     . venv/bin/activate
 
-    pip install fastapi[all] psycopg2-binary
+    pip install -r requirements.txt
 ```
 
 - Start the application with
 
 ``` Bash
-    uvicorn main:app --reload
+    uvicorn app.main:app --reload
 
 ```
 
