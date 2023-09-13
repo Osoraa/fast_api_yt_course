@@ -2,8 +2,13 @@
 
 Course video is hosted on [Youtube](https://youtu.be/0sOvCWFmrtA?list=PL1rYsxRTxo1KBas9ljQv999UGGfRKx7VP)
 
-## Create a virtual env to manage dependencies
+## Starting out
 
-## Setting up initial routes
+> Using Ubuntu 22.04 for this project.
 
-Creating an initial route "/"
+- Set up a Virtual env. for dependency management.
+- Install the fastapi module/dependencies with
+
+``` Python
+    pip install fastapi[all]
+```
