@@ -7,6 +7,8 @@ app = FastAPI()
 class Post(BaseModel):
     title: str
     content: str
+    publish: bool=True
+    location: Optional[str]=None
     
     
 # Root route
