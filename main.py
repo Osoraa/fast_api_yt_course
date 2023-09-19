@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
+from uuid import uuid4
 
 app = FastAPI()
 
@@ -38,7 +39,11 @@ def create_post(body: dict=Body(...)):
 # Second post request
 @app.post("/create_post_2")
 def create_post_2(body: Post):
-    posts.append(dict(body))
+    body = dict(body)
+    
+    # Use the UUID package for the post ID
+    body["id"] = uuid4().time
+    posts.append(body)
     print(posts[0])
     
-    # return {"msg": f"Successfully created post2 with title {body.title}"}
+    return {"msg": f"Successfully created post2 with title {body['title']}"}
