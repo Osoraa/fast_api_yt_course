@@ -52,14 +52,14 @@ def root():
 
 
 @app.get("/posts")
-def get_posts():
+def get_posts() -> dict:
     """Get Posts endpoint"""
 
     return {"data": posts}
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(body: dict = Body(...)):
+def create_post(body: dict = Body(...)) -> dict:
     """First post request"""
 
     print(body)
@@ -67,7 +67,7 @@ def create_post(body: dict = Body(...)):
 
 
 @app.post("/create_post_2", status_code=status.HTTP_201_CREATED)
-def create_post_2(body: Post):
+def create_post_2(body: Post) -> dict:
     """Second post request"""
 
     data = dict(body)
@@ -81,7 +81,7 @@ def create_post_2(body: Post):
 
 
 @app.get("/posts/{id}")
-def get_post(id: int):
+def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
     post = find_post(id)
@@ -93,3 +93,4 @@ def get_post(id: int):
     print(post)
 
     return {"data": post}
+    
