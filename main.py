@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Response
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
@@ -34,7 +34,7 @@ posts = [
 ]
 
 
-def find_post(id=int) -> dict:
+def find_post(id: int) -> dict:
     """Retrieve post"""
 
     for post in posts:
@@ -42,6 +42,11 @@ def find_post(id=int) -> dict:
             return post
         
     return None
+
+def remove_post(post: dict):
+    """Delete a post"""
+    
+    posts.remove(post)
 
 
 @app.get("/")
@@ -93,4 +98,21 @@ def get_post(id: int) -> dict:
     print(post)
 
     return {"data": post}
+
+
+@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(id: int) -> Response:
+    """Delete a post"""
     
+    post = find_post(id)
+
+    # Handle invalid Post id
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id: {id} does not exist")
+
+    remove_post(post)
+        
+    print(f"\n{posts}\n")
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
