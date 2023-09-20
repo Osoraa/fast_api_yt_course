@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
@@ -40,6 +40,8 @@ def find_post(id=int) -> dict:
     for post in posts:
         if post["id"] == id:
             return post
+        
+    return None
 
 
 @app.get("/")
@@ -56,7 +58,7 @@ def get_posts():
     return {"data": posts}
 
 
-@app.post("/posts")
+@app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_post(body: dict = Body(...)):
     """First post request"""
 
@@ -64,7 +66,7 @@ def create_post(body: dict = Body(...)):
     return {"msg": f"Successfully created post with title {body['Title']}"}
 
 
-@app.post("/create_post_2")
+@app.post("/create_post_2", status_code=status.HTTP_201_CREATED)
 def create_post_2(body: Post):
     """Second post request"""
 
@@ -83,6 +85,11 @@ def get_post(id: int):
     """Route to get a single Post"""
 
     post = find_post(id)
+    
+    # Handle invalid Post id
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id: {id} does not exist")
     print(post)
 
     return {"data": post}
