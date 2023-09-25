@@ -16,6 +16,7 @@ class Post(BaseModel):
     location: Optional[str] = None
 
 
+# Posts database is a list of dicts
 posts = [
     {
         'title': 'Second post in Postman',
@@ -43,10 +44,12 @@ def find_post(id: int) -> dict:
         
     return None
 
-def remove_post(post: dict):
+def remove_post(post: dict) -> None:
     """Delete a post"""
+
+    global posts
     
-    posts.remove(post)
+    posts = [p for p in posts if p != post]
 
 
 @app.get("/")
@@ -103,11 +106,13 @@ def get_post(id: int) -> dict:
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int) -> Response:
     """Delete a post"""
+
+    print(f"\n{posts}\n")
     
     post = find_post(id)
 
     # Handle invalid Post id
-    if not post:
+    if post is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post with id: {id} does not exist")
 
@@ -116,3 +121,8 @@ def delete_post(id: int) -> Response:
     print(f"\n{posts}\n")
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.patch("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
+def update_post(id: int) -> Response:
+    """Update a post."""
