@@ -41,14 +41,16 @@ def find_post(id: int) -> dict:
     for post in posts:
         if post["id"] == id:
             return post
-        
-    return None
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Post with id: {id} does not exist")
+
 
 def remove_post(post: dict) -> None:
     """Delete a post"""
 
     global posts
-    
+
     posts = [p for p in posts if p != post]
 
 
@@ -93,11 +95,7 @@ def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
     post = find_post(id)
-    
-    # Handle invalid Post id
-    if not post:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Post with id: {id} does not exist")
+
     print(post)
 
     return {"data": post}
@@ -108,21 +106,11 @@ def delete_post(id: int) -> Response:
     """Delete a post"""
 
     print(f"\n{posts}\n")
-    
+
     post = find_post(id)
 
-    # Handle invalid Post id
-    if post is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Post with id: {id} does not exist")
-
     remove_post(post)
-        
+
     print(f"\n{posts}\n")
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@app.patch("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
-def update_post(id: int) -> Response:
-    """Update a post."""
