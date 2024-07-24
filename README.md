@@ -9,6 +9,12 @@ Course video is hosted on [Youtube](https://youtu.be/0sOvCWFmrtA?list=PL1rYsxRTx
 - Set up a Virtual env. for dependency management.
 - Install the fastapi module/dependencies with
 
-``` Python
+``` Bash
     pip install fastapi[all]
+```
+- Start the application with 
+
+``` Bash
+    uvicorn main:app --reload
+
 ```
