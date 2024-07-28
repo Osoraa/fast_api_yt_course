@@ -116,3 +116,6 @@ def delete_post(id: int) -> Response:
     print(f"\n{posts}\n")
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# Todo: Implement Update Post.
