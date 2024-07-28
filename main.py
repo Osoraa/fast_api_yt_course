@@ -68,15 +68,17 @@ def get_posts() -> dict:
     return {"data": posts}
 
 
+# Creates a post but doesn't append to Posts dict
+# @app.post("/posts", status_code=status.HTTP_201_CREATED)
+# def create_post(body: dict = Body(...)) -> dict:
+#     """First post request"""
+
+#     print(body)
+#     return {"msg": f"Successfully created post with title {body['title']}"}
+
+
+# Creates and appends post to Posts dict
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(body: dict = Body(...)) -> dict:
-    """First post request"""
-
-    print(body)
-    return {"msg": f"Successfully created post with title {body['Title']}"}
-
-
-@app.post("/create_post_2", status_code=status.HTTP_201_CREATED)
 def create_post_2(body: Post) -> dict:
     """Second post request"""
 
