@@ -127,13 +127,9 @@ def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
     
     index = find_post(id)
-    post = posts.pop(index)
     
     data = dict(body)
     
-    for key in data:
-        post[key] = data[key]
-        
-    posts.append(post)
+    posts[index].update(data)
     
-    return {"data": posts[-1]}
+    return {"data": posts[index]}
