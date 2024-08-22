@@ -35,12 +35,12 @@ posts = [
 ]
 
 
-def find_post(id: int) -> dict:
+def find_post(id: int) -> int:
     """Retrieve post"""
 
     for post in posts:
         if post["id"] == id:
-            return post
+            return posts.index(post)
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail=f"Post with id: {id} does not exist")
@@ -96,7 +96,7 @@ def create_post_2(body: Post) -> dict:
 def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
-    post = find_post(id)
+    post = posts[find_post(id)]
 
     print(post)
 
@@ -109,7 +109,7 @@ def delete_post(id: int) -> Response:
 
     print(f"\n{posts}\n")
 
-    post = find_post(id)
+    post = posts[find_post(id)]
 
     remove_post(post)
 
@@ -119,3 +119,21 @@ def delete_post(id: int) -> Response:
 
 
 # Todo: Implement Update Post.
+# find post
+# update post if found
+
+@app.put("/posts/{id}", status_code=status.HTTP_200_OK)
+def update_post(id: int, body: Post) -> dict:
+    """Update a Post"""
+    
+    index = find_post(id)
+    post = posts.pop(index)
+    
+    data = dict(body)
+    
+    for key in data:
+        post[key] = data[key]
+        
+    posts.append(post)
+    
+    return {"data": posts[-1]}
