@@ -35,7 +35,7 @@ posts = [
 ]
 
 
-def find_post(id: int) -> int:
+def find_post_index(id: int) -> int:
     """Retrieve post"""
 
     for post in posts:
@@ -96,7 +96,7 @@ def create_post_2(body: Post) -> dict:
 def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
-    post = posts[find_post(id)]
+    post = posts[find_post_index(id)]
 
     print(post)
 
@@ -109,7 +109,7 @@ def delete_post(id: int) -> Response:
 
     print(f"\n{posts}\n")
 
-    post = posts[find_post(id)]
+    post = posts[find_post_index(id)]
 
     remove_post(post)
 
@@ -126,7 +126,7 @@ def delete_post(id: int) -> Response:
 def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
     
-    index = find_post(id)
+    index = find_post_index(id)
     
     data = dict(body)
     
