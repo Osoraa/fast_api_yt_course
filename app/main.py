@@ -118,10 +118,6 @@ def delete_post(id: int) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-# Todo: Implement Update Post.
-# find post
-# update post if found
-
 @app.put("/posts/{id}", status_code=status.HTTP_200_OK)
 def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
