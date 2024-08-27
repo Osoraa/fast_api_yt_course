@@ -62,6 +62,7 @@ def root():
     return {"message": "Hello World from FastApi"}
 
 
+# Retrieves all posts in database
 @app.get("/posts")
 def get_posts() -> dict:
     """Get Posts endpoint"""
@@ -71,15 +72,6 @@ def get_posts() -> dict:
     posts = cur.fetchall()
 
     return {"data": posts}
-
-
-# Creates a post but doesn't append to Posts dict
-# @app.post("/posts", status_code=status.HTTP_201_CREATED)
-# def create_post(body: dict = Body(...)) -> dict:
-#     """First post request"""
-
-#     print(body)
-#     return {"msg": f"Successfully created post with title {body['title']}"}
 
 
 # Creates and appends post to Posts dict
