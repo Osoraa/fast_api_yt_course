@@ -9,6 +9,7 @@ from time import sleep
 
 app = FastAPI()
 
+
 class Post(BaseModel):
     """Base Post class"""
 
@@ -19,19 +20,20 @@ class Post(BaseModel):
 
 
 # Connect to the posts table on the fastapi database
-while True: 
+while True:
     try:
-        conn = psycopg2.connect("dbname=fastapi user=postgres port=5433 password=postgres")
-        
+        conn = psycopg2.connect(
+            "dbname=fastapi user=postgres port=5433 password=postgres")
+
         cur = conn.cursor()
-            
+
         cur.execute("SELECT * FROM posts")
-                
+
         posts = cur.fetchall()
-        
+
         print("Database connected successfully!!")
         break
-    
+
     except Exception as error:
         print("Error - ", error)
         sleep(2)
@@ -142,11 +144,11 @@ def delete_post(id: int) -> Response:
 @app.put("/posts/{id}", status_code=status.HTTP_200_OK)
 def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
-    
+
     index = find_post_index(id)
-    
+
     data = dict(body)
-    
+
     posts[index].update(data)
-    
+
     return {"data": posts[index]}
