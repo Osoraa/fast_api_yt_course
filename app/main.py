@@ -28,35 +28,12 @@ while True:
 
         cur = conn.cursor()
 
-        cur.execute("SELECT * FROM posts")
-
-        posts = cur.fetchall()
-
         print("Database connected successfully!!")
         break
 
     except Exception as error:
         print("Error - ", error)
         sleep(2)
-
-
-# Posts database is a list of dicts
-# posts = [
-#     {
-#         'title': 'Second post in Postman',
-#         'content': 'Testing Optionals and Defaults',
-#         'publish': True,
-#         'location': None,
-#         'id': 92
-#     },
-#     {
-#         'title': 'Placeholder post',
-#         'content': 'Basic Defaults',
-#         'publish': False,
-#         'location': "Lagos",
-#         'id': 90
-#     }
-# ]
 
 
 def find_post_index(id: int) -> int:
@@ -88,6 +65,10 @@ def root():
 @app.get("/posts")
 def get_posts() -> dict:
     """Get Posts endpoint"""
+    
+    cur.execute("SELECT * FROM posts")
+    
+    posts = cur.fetchall()
 
     return {"data": posts}
 
