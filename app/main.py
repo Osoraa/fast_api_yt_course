@@ -67,7 +67,7 @@ def root():
 def get_posts() -> dict:
     """Get Posts endpoint"""
     
-    cur.execute("SELECT * FROM posts")
+    cur.execute("""SELECT * FROM posts""")
     
     posts = cur.fetchall()
 
@@ -89,6 +89,7 @@ def create_post_2(body: Post) -> dict:
     return {"msg": f"Successfully created post2 with title {body.title}"}
 
 
+# Gets a single post
 @app.get("/posts/{id}")
 def get_post(id: int) -> dict:
     """Route to get a single Post"""
@@ -100,6 +101,7 @@ def get_post(id: int) -> dict:
     return {"data": post}
 
 
+# Deletes a post
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int) -> Response:
     """Delete a post"""
@@ -115,6 +117,7 @@ def delete_post(id: int) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+# Updates an existing post
 @app.put("/posts/{id}", status_code=status.HTTP_200_OK)
 def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
