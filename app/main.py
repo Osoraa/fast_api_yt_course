@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import uuid4
 import psycopg2
+from psycopg2.extras import RealDictCursor
 from time import sleep
 
 
@@ -23,7 +24,7 @@ class Post(BaseModel):
 while True:
     try:
         conn = psycopg2.connect(
-            "dbname=fastapi user=postgres port=5433 password=postgres")
+            "dbname=fastapi user=postgres port=5433 password=postgres", cursor_factory=RealDictCursor)
 
         cur = conn.cursor()
 
