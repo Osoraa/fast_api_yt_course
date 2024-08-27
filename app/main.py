@@ -3,9 +3,11 @@ from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
 from uuid import uuid4
+import psycopg2
+from time import sleep
+
 
 app = FastAPI()
-
 
 class Post(BaseModel):
     """Base Post class"""
@@ -13,26 +15,45 @@ class Post(BaseModel):
     title: str
     content: str
     publish: bool = True
-    location: Optional[str] = None
+    # location: Optional[str] = None
+
+
+# Connect to the posts table on the fastapi database
+while True: 
+    try:
+        conn = psycopg2.connect("dbname=fastapi user=postgres port=5433 password=postgres")
+        
+        cur = conn.cursor()
+            
+        cur.execute("SELECT * FROM posts")
+                
+        posts = cur.fetchall()
+        
+        print("Database connected successfully!!")
+        break
+    
+    except Exception as error:
+        print("Error - ", error)
+        sleep(2)
 
 
 # Posts database is a list of dicts
-posts = [
-    {
-        'title': 'Second post in Postman',
-        'content': 'Testing Optionals and Defaults',
-        'publish': True,
-        'location': None,
-        'id': 92
-    },
-    {
-        'title': 'Placeholder post',
-        'content': 'Basic Defaults',
-        'publish': False,
-        'location': "Lagos",
-        'id': 90
-    }
-]
+# posts = [
+#     {
+#         'title': 'Second post in Postman',
+#         'content': 'Testing Optionals and Defaults',
+#         'publish': True,
+#         'location': None,
+#         'id': 92
+#     },
+#     {
+#         'title': 'Placeholder post',
+#         'content': 'Basic Defaults',
+#         'publish': False,
+#         'location': "Lagos",
+#         'id': 90
+#     }
+# ]
 
 
 def find_post_index(id: int) -> int:
