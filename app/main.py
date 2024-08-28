@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, status, Response
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
-from uuid import uuid4
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from time import sleep
@@ -98,7 +97,14 @@ def create_post(body: Post) -> dict:
 def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
-    post = posts[find_post_index(id)]
+    # A tuple has to be passed to the query in cur.execute for it to work
+    cur.execute("""SELECT * FROM posts WHERE id = %s""", (str(id),))
+
+    post = cur.fetchone()
+
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id: {id} does not exist")
 
     print(post)
 
