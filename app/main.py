@@ -11,6 +11,7 @@ from time import sleep
 app = FastAPI()
 
 
+# Post Class
 class Post(BaseModel):
     """Base Post class"""
 
@@ -66,9 +67,9 @@ def root():
 @app.get("/posts")
 def get_posts() -> dict:
     """Get Posts endpoint"""
-    
+
     cur.execute("""SELECT * FROM posts""")
-    
+
     posts = cur.fetchall()
 
     return {"data": posts}
@@ -76,17 +77,20 @@ def get_posts() -> dict:
 
 # Creates and appends post to Posts dict
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post_2(body: Post) -> dict:
+def create_post(body: Post) -> dict:
     """Second post request"""
 
-    data = dict(body)
+    cur.execute("""INSERT INTO posts (title, content, publish) VALUES (%s, %s, %s) RETURNING * """,
+                (body.title, body.content, body.publish))
 
-    # Use the UUID package for the post ID
-    data["id"] = uuid4().time
-    posts.append(data)
+    data = cur.fetchone()
+
     print(data)
 
-    return {"msg": f"Successfully created post2 with title {body.title}"}
+    # Conmmit on the db connection object not cursor
+    conn.commit()
+
+    return {"msg": f"Successfully created post with title: {data['title']}"}
 
 
 # Gets a single post
