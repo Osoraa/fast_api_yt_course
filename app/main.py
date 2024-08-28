@@ -1,7 +1,5 @@
 from fastapi import FastAPI, HTTPException, status, Response
-from fastapi.params import Body
 from pydantic import BaseModel
-from typing import Optional
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from time import sleep
@@ -36,17 +34,7 @@ while True:
         sleep(2)
 
 
-def find_post_index(id: int) -> int:
-    """Retrieve post"""
-
-    for post in posts:
-        if post["id"] == id:
-            return posts.index(post)
-
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Post with id: {id} does not exist")
-
-
+# Default route - Landing page
 @app.get("/")
 def root():
     """Root route"""
@@ -128,10 +116,17 @@ def delete_post(id: int) -> Response:
 def update_post(id: int, body: Post) -> dict:
     """Update a Post"""
 
-    index = find_post_index(id)
+    cur.execute("""UPDATE posts SET title=%s, content=%s, publish=%s WHERE id = %s RETURNING *""",
+                (body.title, body.content, body.publish, id))
 
-    data = dict(body)
+    post = cur.fetchone()
 
-    posts[index].update(data)
+    print(post)
 
-    return {"data": posts[index]}
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id: {id} does not exist")
+
+    conn.commit()
+
+    return {"Updated post": post}
