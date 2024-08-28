@@ -16,7 +16,7 @@ class Post(BaseModel):
 
     title: str
     content: str
-    publish: bool = True
+    publish: bool = False
     # location: Optional[str] = None
 
 
@@ -47,14 +47,6 @@ def find_post_index(id: int) -> int:
                         detail=f"Post with id: {id} does not exist")
 
 
-def remove_post(post: dict) -> None:
-    """Delete a post"""
-
-    global posts
-
-    posts = [p for p in posts if p != post]
-
-
 @app.get("/")
 def root():
     """Root route"""
@@ -79,7 +71,7 @@ def get_posts() -> dict:
 def create_post(body: Post) -> dict:
     """Second post request"""
 
-    cur.execute("""INSERT INTO posts (title, content, publish) VALUES (%s, %s, %s) RETURNING * """,
+    cur.execute("""INSERT INTO posts (title, content, publish) VALUES (%s, %s, %s) RETURNING *""",
                 (body.title, body.content, body.publish))
 
     data = cur.fetchone()
@@ -98,7 +90,7 @@ def get_post(id: int) -> dict:
     """Route to get a single Post"""
 
     # A tuple has to be passed to the query in cur.execute for it to work
-    cur.execute("""SELECT * FROM posts WHERE id = %s""", (str(id),))
+    cur.execute("""SELECT * FROM posts WHERE id = %s""", (id,))
 
     post = cur.fetchone()
 
@@ -116,13 +108,17 @@ def get_post(id: int) -> dict:
 def delete_post(id: int) -> Response:
     """Delete a post"""
 
-    print(f"\n{posts}\n")
+    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (id,))
 
-    post = posts[find_post_index(id)]
+    post = cur.fetchone()
 
-    remove_post(post)
+    print(f"\n{post}\n")
 
-    print(f"\n{posts}\n")
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id: {id} does not exist")
+
+    conn.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
